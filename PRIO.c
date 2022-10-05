@@ -14,7 +14,7 @@ typedef struct process {
 } process;
 
 void PRIO(process *proc, int preemptif) {
-    
+
 }
 
 int main() {
@@ -40,5 +40,5 @@ int main() {
    
 
 
-    return 1;
+    return 0;
 }
