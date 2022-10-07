@@ -133,7 +133,7 @@ void prio(process *proc, int nbp)
                 continue;
             }
 
-            if()
+            //if()
         }
         
         if (index_last_in != nbp-1 && proc[index_last_in+1].TpsArr == curent_tps) 
@@ -221,6 +221,28 @@ void ORDO(process *proc, int nbp)
     printf("le temps moyen de sejour est = %f\n", TpsSejMoy);
     printf("le temps moyen d'attente est = %f\n", TpsAttMoy);
 }
+/**
+ * @brief fonction initialisation des variables (on a juste modififer pour que ce soit moins moche en gros)
+ * @todo faudra modifier ce commentaire
+ * @author Achille Furger
+ * 
+ * @param fnom 
+ * @param fTpsExe 
+ * @param fTpsArr 
+ * @param fpriorite 
+ * @param fstatus 
+ * @param proc 
+ * @param i 
+ */
+
+void fonctionALaCon(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, int fstatus, process *proc, int i)
+{
+  strcpy(proc[i].nom, fnom);
+  proc[i].TpsExe = fTpsExe;
+  proc[i].TpsArr = fTpsArr;
+  proc[i].priorite = fpriorite;
+  proc[0].status = fstatus;
+}
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -237,44 +259,26 @@ void ORDO(process *proc, int nbp)
  *  @return EXIT_SUCCESS : le programme doit se terminer normalement
  *
  */
-int main()
-{
+
+int main() {
 
     // Creation de cinq processus
     int nbp = 5;
     process *proc;
     proc = (process *)malloc(sizeof(process) * nbp);
     // Initialisation des donn�es
-    strcpy(proc[0].nom, "A");
-    proc[0].TpsExe = 10;
-    proc[0].TpsArr = 2;
-    proc[0].priorite = 3;
-    proc[0].status = 0;
-    strcpy(proc[1].nom, "B");
-    proc[1].TpsExe = 6;
-    proc[1].TpsArr = 0;
-    proc[1].priorite = 5;
-    proc[0].status = 0;
-    strcpy(proc[2].nom, "C");
-    proc[2].TpsExe = 2;
-    proc[2].TpsArr = 5;
-    proc[2].priorite = 2;
-    proc[0].status = 0;
-    strcpy(proc[3].nom, "D");
-    proc[3].TpsExe = 4;
-    proc[3].TpsArr = 5;
-    proc[3].priorite = 1;
-    proc[0].status = 0;
-    strcpy(proc[4].nom, "E");
-    proc[4].TpsExe = 8;
-    proc[4].TpsArr = 3;
-    proc[4].priorite = 4;
-    proc[0].status = 0;
+
+    fonctionALaCon("A",10,2,3,0,proc,0);
+    fonctionALaCon("B",6,0,5,0,proc,1);
+    fonctionALaCon("C",2,5,2,0,proc,2);
+    fonctionALaCon("D",4,5,1,0,proc,3);
+    fonctionALaCon("E",8,3,4,0,proc,4);
+
     // Afficher l'ordonnancement appilqu�
     printf("Ordonnancement PRIO  :\n");
     printf("*********************\n");
     // Appel de PRIO
-    prio(proc, nbp);
+    //prio(proc, nbp);
     ORDO(proc, nbp);
 
     return (0);
