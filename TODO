@@ -2,7 +2,7 @@
 
 A faire : 
     [ ] Commentaire
-    [ ] Copier/Coler l'ordo 
+    [x] Copier/Coler l'ordo 
     [ ] Test pour verifier le fonctionnement
     [ ] Ajouter la priorité dans la structure process et adapter la fonction de construction
     [ ] Creer un fonction de construction ( process new_process() ) pour la structure process avec verification des valeurs entrées
