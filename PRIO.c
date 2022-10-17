@@ -27,7 +27,7 @@ typedef struct process
 
 /**
  *  @fn void FIFO (process *proc, int nbp)
- *  @author William Meunier<meunierwil@cy-tech.fr>
+ *  @author Faucher Noé <fauchernoe@cy-tech.fr>
  *  @version 0.1
  *  @date Wed 05 Oct 2022 12:23
  *
@@ -56,11 +56,90 @@ void FIFO(process *proc, int nbp)
     }
 }
 
+/**
+ *  @fn void FIFO (process *proc, int nbp)
+ *  @author Faucher Noé <fauchernoe@cy-tech.fr>
+ *  @version 0.1
+ *  @date Wed 05 Oct 2022 12:23
+ *
+ *  @brief Ordonne les proc en FIFO
+ *
+ *  @param[in]
+ *
+ */
+void echange(process *proc, int i, int j) {
+    process temp = proc[i];
 
+    proc[i]=proc[j];
+    proc[j]=temp;
+}
+
+/**
+ *  @fn void affich_stat_ORDO (process *proc, int nbp)
+ *  @author William Meunier<meunierwil@cy-tech.fr>
+ *  @version 0.1
+ *  @date Wed 05 Oct 2022 12:15
+ *
+ *  @brief Calcul temps : Fin, Sej, Att et total : Fin, Sej, Att
+ *
+ *  @param[in]
+ *
+ */
+
+void affich_stat_ORDO(process *proc, int nbp)
+{
+    // Calcul du TpsFin, TpsSej, TotSej et TpsAtt, TotAtt
+    int TotAtt,TotSej = 0;
+    for (int i = 0; i < nbp; i++)
+    {
+        proc[i].TpsSej = proc[i].TpsFin - proc[i].TpsArr;
+        proc[i].TpsAtt = proc[i].TpsSej - proc[i].TpsExe;
+
+        TotSej = TotSej + proc[i].TpsSej;
+        TotAtt = TotAtt + proc[i].TpsAtt;
+    }
+    // Afficher le Temps d'execution et le Temps d'arrivee et de chaque processus
+    printf("Processus\t TpsExe\t TpsArr\t TpsFin\t TpsSej\t TpsAtt\t priorité\n");
+    for (int i = 0; i < nbp; i++)
+    {
+        printf("%s\t\t %d\t %d\t %d\t %d\t %d\t %d\n", proc[i].nom, proc[i].TpsExe, proc[i].TpsArr, proc[i].TpsFin, proc[i].TpsSej, proc[i].TpsAtt, proc[i].priorite);
+    }
+    printf("\n");
+
+    // afficher les temps moyen de sejour et d'attente
+    float TpsSejMoy, TpsAttMoy;
+    TpsSejMoy = (float)TotSej / nbp;
+    TpsAttMoy = (float)TotAtt / nbp;
+    printf("le temps moyen de sejour est = %f\n", TpsSejMoy);
+    printf("le temps moyen d'attente est = %f\n", TpsAttMoy);
+}
+
+/**
+ *  @fn void FIFO (process *proc, int nbp)
+ *  @author Faucher Noé <fauchernoe@cy-tech.fr>
+ *  @version 0.1
+ *  @date Wed 05 Oct 2022 12:23
+ *
+ *  @brief Ordonne les proc en FIFO
+ *
+ *  @param[in]
+ *
+ */
+void affich_proc(process *proc,int nbp)
+{
+    for (int i = 0; i < nbp; i++)
+    {
+        for (int j = 0; j < proc[i].TpsExe; j++)
+        {
+            printf("%s ", proc[i].nom);
+        }
+    }
+    printf("\n\n");
+}
 
 /**
  *  @fn void prio (process *proc, int nbp)
- *  @author William Meunier<meunierwil@cy-tech.fr>
+ *  @author Noe Faucher<fauchernoe@cy-tech.fr>
  *  @version 0.1
  *  @date Wed 05 Oct 2022 12:06
  *
@@ -73,6 +152,7 @@ void PRIO(process *proc, int nbp, int preemptif) {
     
     // Utilise le FIFO pour ordonner les processus
     FIFO(proc, nbp);
+    //affich_proc(proc,nbp);
     
     int nbp_end = 0;
     int curent_tps = 0;
@@ -84,6 +164,7 @@ void PRIO(process *proc, int nbp, int preemptif) {
 
     while(nbp_end != nbp)
     {   
+        // Verification et mise à jour d'arriver de process
         if (index_last_in == -1 && proc[0].TpsArr >= curent_tps)
         {   
             curent_tps++;
@@ -99,49 +180,96 @@ void PRIO(process *proc, int nbp, int preemptif) {
             }
             index_last_in+=temp; 
             
-        } 
+        }
 
-        for (int i=0; i<=index_last_in; i++)
+        // Choisir le nouveau process
+        if (preemptif || index_curent_running == -1)
         {
-            if (proc[i].status == -1)
-            {
-                continue;
-            }
 
-            if (!preemptif) 
-            { 
-                if (proc[i].status == proc[i].TpsExe)
+            int min_prio_index = nbp_end;
+            for (int i=nbp_end; i<=index_last_in; i++)
+            {
+                if (proc[i].priorite < proc[min_prio_index].priorite ) 
                 {
-                    nbp_end++;
-                    proc[i].status = -1;
-                    
-                }else
-                {
-                    break;
+                    min_prio_index = i;
                 }
             }
+
+            if (index_curent_running != -1)
+            {
+                echange(proc,min_prio_index,index_curent_running);
+
+            }else
+            {
+                echange(proc,min_prio_index,nbp_end);
+                index_curent_running=nbp_end;
+            }
+        }
+
+
+
+
+        // Maj du statut de process
+        if (proc[index_curent_running].status == -1)
+        {
+            curent_tps++;
+            continue;
+        }
+
+        if (proc[index_curent_running].status == proc[index_curent_running].TpsExe)
+        {
+            nbp_end++;
+            proc[index_curent_running].status = -1;
+            proc[index_curent_running].TpsFin = curent_tps-nbp_end;
+            index_curent_running = -1; 
+            curent_tps++;
+            continue;
         }
         
+        proc[index_curent_running].status++;  
+        
+        
+
         if (index_last_in != nbp-1 && proc[index_last_in+1].TpsArr == curent_tps) 
         {
             index_last_in++;
         }
+        
+        
+        //affich_proc(proc,nbp);
+
+        printf("%s ",proc[index_curent_running].nom);
         curent_tps++;
     }
 
 
-    // Afficher l'enchainement des processus
-    for (int i = 0; i < nbp; i++)
-    {
-        for (int j = 0; j < proc[i].TpsExe; j++)
-        {
-            printf("%s ", proc[i].nom);
-        }
-    }
-    printf("\n\n");
+    //affich_proc(proc,nbp);
 
+    printf("\n");
 
+}
 
+/**
+ * @brief fonction initialisation des variables (on a juste modififer pour que ce soit moins moche en gros)
+ * @todo faudra modifier ce commentaire
+ * @author Achille Furger
+ * 
+ * @param fnom 
+ * @param fTpsExe 
+ * @param fTpsArr 
+ * @param fpriorite 
+ * @param fstatus 
+ * @param proc 
+ * @param i 
+ */
+
+void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, process *proc, int i)
+{
+  strcpy(proc[i].nom, fnom);
+  proc[i].TpsExe = fTpsExe;
+  proc[i].TpsArr = fTpsArr;
+  proc[i].priorite = fpriorite;
+  proc[i].status = 0;
 }
 
 int main() {
@@ -150,38 +278,22 @@ int main() {
     int nbp = 5;
     process *proc;
     proc = (process *)malloc(sizeof(process) * nbp);
+    
     // Initialisation des donn�es
-    strcpy(proc[0].nom, "A");
-    proc[0].TpsExe = 10;
-    proc[0].TpsArr = 2;
-    proc[0].priorite = 3;
-    proc[0].status = 0;
-    strcpy(proc[1].nom, "B");
-    proc[1].TpsExe = 6;
-    proc[1].TpsArr = 0;
-    proc[1].priorite = 5;
-    proc[0].status = 0;
-    strcpy(proc[2].nom, "C");
-    proc[2].TpsExe = 2;
-    proc[2].TpsArr = 5;
-    proc[2].priorite = 2;
-    proc[0].status = 0;
-    strcpy(proc[3].nom, "D");
-    proc[3].TpsExe = 4;
-    proc[3].TpsArr = 5;
-    proc[3].priorite = 1;
-    proc[0].status = 0;
-    strcpy(proc[4].nom, "E");
-    proc[4].TpsExe = 8;
-    proc[4].TpsArr = 3;
-    proc[4].priorite = 4;
-    proc[0].status = 0;
+    process_construct("A",10,2,3,proc,0);
+    process_construct("B",6,0,5,proc,1);
+    process_construct("C",2,5,2,proc,2);
+    process_construct("D",4,5,1,proc,3);
+    process_construct("E",8,3,4,proc,4);
+    
     // Afficher l'ordonnancement appilqu�
-    printf("Ordonnancement PRIO  :\n");
-    printf("*********************\n");
+    int preemptif = 0;
+    printf("Ordonnancement PRIO %s",(preemptif)?"préemptif":"non préemtif");
+    printf(" :\n*********************\n");
+
     // Appel de PRIO
-    prio(proc, nbp);
-    ORDO(proc, nbp);
+    PRIO(proc, nbp,preemptif);
+    affich_stat_ORDO(proc, nbp);
 
     return (0);
 }
