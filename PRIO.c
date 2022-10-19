@@ -1,7 +1,10 @@
 /**
  * @file PRIO.c
  * @author Faucher Noé (fauchernoe@cy-tech.fr)
- * @brief 
+ * @author Ducoulombier Quentin (ducoulombi@cy-tech.fr)
+ * @author William Maunier (meunierwil@cy-tech.fr)
+ * @author Furger Achille (furgerachi@cy-tech.fr)
+ * @brief Algorithme d'ordonnancement par priorité
  * @version 0.1
  * @date 19-10-2022
  * 
@@ -261,17 +264,17 @@ void PRIO(process *proc, int nbp, int preemptif) {
 /**
  * @author Quentin Ducoulombier (ducoulombi@cy-tech.fr)
  * @version 0.1
- * @date 2022-10-17
+ * @date 2022-10-19
+ * 
  * @brief Fonction qui permet de construire les "process"
+ * 
  * @param fnom 
  * @param fTpsExe 
  * @param fTpsArr 
  * @param fpriorite 
  * @param proc 
  * @param i 
- * 
  */
-
 void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, process *proc, int i)
 {
   strcpy(proc[i].nom, fnom);
