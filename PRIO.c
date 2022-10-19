@@ -259,17 +259,17 @@ void PRIO(process *proc, int nbp, int preemptif) {
 }
 
 /**
- * @brief fonction initialisation des variables (on a juste modififer pour que ce soit moins moche en gros)
- * @todo faudra modifier ce commentaire
- * @author Achille Furger
- * 
+ * @author Quentin Ducoulombier (ducoulombi@cy-tech.fr)
+ * @version 0.1
+ * @date 2022-10-17
+ * @brief Fonction qui permet de construire les "process"
  * @param fnom 
  * @param fTpsExe 
  * @param fTpsArr 
  * @param fpriorite 
- * @param fstatus 
  * @param proc 
  * @param i 
+ * 
  */
 
 void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, process *proc, int i)
