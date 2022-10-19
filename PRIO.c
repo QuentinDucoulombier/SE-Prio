@@ -289,6 +289,7 @@ int main(int argc, char const *argv[]) {
 
     if (argc != 2 ) 
     {
+        printf("Pas assez d'argument ou trop (il en faut 1)\n");
         return 1;
     }
 
