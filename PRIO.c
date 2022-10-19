@@ -1,3 +1,14 @@
+/**
+ * @file PRIO.c
+ * @author Faucher Noé (fauchernoe@cy-tech.fr)
+ * @brief 
+ * @version 0.1
+ * @date 19-10-2022
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,7 +39,7 @@ typedef struct process
 /**
  *  @fn void FIFO (process *proc, int nbp)
  *  @author Faucher Noé <fauchernoe@cy-tech.fr>
- *  @version 0.1
+ *  @version 2.0
  *  @date Wed 05 Oct 2022 12:23
  *
  *  @brief Ordonne les proc en FIFO
@@ -160,8 +171,6 @@ void PRIO(process *proc, int nbp, int preemptif) {
     int index_last_in = -1;
 
 
-    process permut;
-
     while(nbp_end != nbp)
     {   
         // Verification et mise à jour d'arriver de process
@@ -272,7 +281,16 @@ void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, proc
   proc[i].status = 0;
 }
 
-int main() {
+
+
+
+
+int main(int argc, char const *argv[]) {
+
+    if (argc != 2 ) 
+    {
+        return 1;
+    }
 
     // Creation de cinq processus
     int nbp = 5;
@@ -287,7 +305,7 @@ int main() {
     process_construct("E",8,3,4,proc,4);
     
     // Afficher l'ordonnancement appilqu�
-    int preemptif = 0;
+    int preemptif = atoi(argv[1]);
     printf("Ordonnancement PRIO %s",(preemptif)?"préemptif":"non préemtif");
     printf(" :\n*********************\n");
 
@@ -295,5 +313,5 @@ int main() {
     PRIO(proc, nbp,preemptif);
     affich_stat_ORDO(proc, nbp);
 
-    return (0);
+    return 0;
 }
