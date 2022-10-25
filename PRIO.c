@@ -284,9 +284,166 @@ void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, proc
   proc[i].status = 0;
 }
 
+/**
+ * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @version 0.1
+ * @date 25-10-2022
+ * 
+ * @brief Fonction qui génère un entier aléatoire entre deux bornes
+ * 
+ * @param lower 
+ * @param upper 
+ * @return int 
+ */
 
+int alea(int lower, int upper){
+    int num = (rand() % (upper - lower + 1)) + lower;
+    return num;
+}
 
+/**
+ * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @version 0.1
+ * @date 25-10-2022
+ * 
+ * @brief Fonction qui teste avec les résultats du cours
+ * 
+ * @param nbp 
+ * @return process* 
+ */
 
+process *exempleCours(int nbp){
+    // Creation de cinq processus
+    process *proc;
+    proc = (process *)malloc(sizeof(process) * nbp);
+    
+    // Initialisation des donn�es
+    process_construct("A",10,2,3,proc,0);
+    process_construct("B",6,0,5,proc,1);
+    process_construct("C",2,5,2,proc,2);
+    process_construct("D",4,5,1,proc,3);
+    process_construct("E",8,3,4,proc,4);
+
+    return proc;
+}
+
+/**
+ * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @version 0.1
+ * @date 25-10-2022
+ * 
+ * @brief Fonction qui teste un cas plus ou moins extrèmes
+ * 
+ * @param nbp 
+ * @return process* 
+ */
+
+process *test1(int nbp) {
+    // Création des processus
+    process *proc;
+    proc = (process *)malloc(sizeof(process) * nbp);
+
+    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    for (int i = 0; i < nbp; i++)
+    {
+        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
+    }
+    return proc;
+}
+
+/**
+ * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @version 0.1
+ * @date 25-10-2022
+ * 
+ * @brief Fonction qui teste un cas plus ou moins extrèmes
+ * 
+ * @param nbp 
+ * @return process* 
+ */
+
+process *test2(int nbp) {
+    // Création des processus
+    process *proc;
+    proc = (process *)malloc(sizeof(process) * nbp);
+
+    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    for (int i = 0; i < nbp; i++)
+    {
+        process_construct(str[i], alea(0,20), alea(0,40), alea(0,10), proc, i);
+    }
+    return proc;
+}
+
+/**
+ * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @version 0.1
+ * @date 25-10-2022
+ * 
+ * @brief Fonction qui teste un cas plus ou moins extrèmes
+ * 
+ * @param nbp 
+ * @return process* 
+ */
+
+process *test3(int nbp) {
+    // Création des processus
+    process *proc;
+    proc = (process *)malloc(sizeof(process) * nbp);
+
+    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    for (int i = 0; i < nbp; i++)
+    {
+        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
+    }
+    return proc;
+}
+
+/**
+ * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @version 0.1
+ * @date 25-10-2022
+ * 
+ * @brief Fonction qui teste un cas plus ou moins extrèmes
+ * 
+ * @param nbp 
+ * @return process* 
+ */
+
+process *test4(int nbp) {
+    // Création des processus
+    process *proc;
+    proc = (process *)malloc(sizeof(process) * nbp);
+
+    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    for (int i = 0; i < nbp; i++)
+    {
+        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
+    }
+    return proc;
+}
+/**
+ * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @version 0.1
+ * @date 25-10-2022
+ * 
+ * @brief Fonction qui teste un cas plus ou moins extrèmes
+ * 
+ * @param nbp 
+ * @return process* 
+ */
+process *test5(int nbp) {
+    // Création des processus
+    process *proc;
+    proc = (process *)malloc(sizeof(process) * nbp);
+
+    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    for (int i = 0; i < nbp; i++)
+    {
+        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
+    }
+    return proc;
+}
 
 int main(int argc, char const *argv[]) {
 
@@ -295,7 +452,7 @@ int main(int argc, char const *argv[]) {
         printf("Pas assez d'argument ou trop (il en faut 1)\n");
         return 1;
     }
-
+/*
     // Creation de cinq processus
     int nbp = 5;
     process *proc;
@@ -307,7 +464,26 @@ int main(int argc, char const *argv[]) {
     process_construct("C",2,5,2,proc,2);
     process_construct("D",4,5,1,proc,3);
     process_construct("E",8,3,4,proc,4);
-    
+*/
+
+    int nbp = 5;
+    process *proc = exempleCours(nbp);
+
+    // int nbp = 10;
+    // process *proc = test1(nbp);
+
+    // int nbp = 1;
+    // process *proc = test2(nbp);
+
+    // int nbp = 0;
+    // process *proc = test3(nbp);
+
+    // int nbp = 36;
+    // process *proc = test4(nbp);
+
+    // int nbp = 100;
+    // process *proc = etest5(nbp);
+
     // Afficher l'ordonnancement appilqu�
     int preemptif = atoi(argv[1]);
     printf("Ordonnancement PRIO %s",(preemptif)?"préemptif":"non préemtif");
@@ -317,5 +493,6 @@ int main(int argc, char const *argv[]) {
     PRIO(proc, nbp,preemptif);
     affich_stat_ORDO(proc, nbp);
 
+    free(proc);
     return 0;
 }
