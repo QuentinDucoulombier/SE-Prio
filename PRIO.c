@@ -15,6 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
+#define STR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
 
 /**
  *  @struct stucture process
@@ -28,7 +31,7 @@
  */
 typedef struct process
 {
-    char nom[20];
+    char nom;
     int TpsExe;
     int TpsArr;
     int TpsFin;
@@ -39,18 +42,44 @@ typedef struct process
 } process;
 
 
+/** 
+ * @fn void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, process *proc, int i)
+ * @author Quentin Ducoulombier (ducoulombi@cy-tech.fr)
+ * @version 0.1
+ * @date 2022-10-19
+ * 
+ * @brief Fonction qui permet de construire les "process"
+ * 
+ * @param fnom 
+ * @param fTpsExe 
+ * @param fTpsArr 
+ * @param fpriorite 
+ * @param proc 
+ * @param i 
+ */
+void process_construct(char fnom, int fTpsExe, int fTpsArr, int fpriorite, process *proc, int i)
+{
+  proc[i].nom = fnom;
+  proc[i].TpsExe = fTpsExe;
+  proc[i].TpsArr = fTpsArr;
+  proc[i].priorite = fpriorite;
+  proc[i].status = 0;
+}
+
+
+
 /**
- *  @fn void FIFO (process *proc, int nbp)
+ *  @fn void tri_en_temps_arriver (process *proc, int nbp)
  *  @author Faucher Noé <fauchernoe@cy-tech.fr>
  *  @version 2.0
  *  @date Wed 05 Oct 2022 12:23
  *
- *  @brief Ordonne les proc en FIFO
+ *  @brief tri les processus selon le temps d'arriver
  *
  *  @param[in]
  *
  */
-void FIFO(process *proc, int nbp)
+void tri_en_temps_arriver(process *proc, int nbp)
 {
     process permut;
     for (int i = 0; i < nbp; i++)
@@ -70,36 +99,37 @@ void FIFO(process *proc, int nbp)
     }
 }
 
-/**
- *  @fn void FIFO (process *proc, int nbp)
- *  @author Faucher Noé <fauchernoe@cy-tech.fr>
- *  @version 0.1
- *  @date Wed 05 Oct 2022 12:23
- *
- *  @brief Ordonne les proc en FIFO
- *
- *  @param[in]
- *
+
+/** 
+ * @fn void echange(process *proc, int i, int j)
+ * @author Faucher Noé (fauchernoe@cy-tech.fr)
+ * @version 0.1
+ * @date 26-10-2022
+ * @brief 
+ * 
+ * @param proc 
+ * @param i 
+ * @param j 
  */
 void echange(process *proc, int i, int j) {
+
     process temp = proc[i];
 
     proc[i]=proc[j];
     proc[j]=temp;
 }
 
-/**
- *  @fn void affich_stat_ORDO (process *proc, int nbp)
- *  @author William Meunier<meunierwil@cy-tech.fr>
- *  @version 0.1
- *  @date Wed 05 Oct 2022 12:15
- *
- *  @brief Calcul temps : Fin, Sej, Att et total : Fin, Sej, Att
- *
- *  @param[in]
- *
- */
 
+/** 
+ * @fn void affich_stat_ORDO(process *proc, int nbp)
+ * @author Faucher Noé (fauchernoe@cy-tech.fr)
+ * @version 0.1
+ * @date 26-10-2022
+ * @brief 
+ * 
+ * @param proc 
+ * @param nbp 
+ */
 void affich_stat_ORDO(process *proc, int nbp)
 {
     // Calcul du TpsFin, TpsSej, TotSej et TpsAtt, TotAtt
@@ -116,7 +146,7 @@ void affich_stat_ORDO(process *proc, int nbp)
     printf("Processus\t TpsExe\t TpsArr\t TpsFin\t TpsSej\t TpsAtt\t priorité\n");
     for (int i = 0; i < nbp; i++)
     {
-        printf("%s\t\t %d\t %d\t %d\t %d\t %d\t %d\n", proc[i].nom, proc[i].TpsExe, proc[i].TpsArr, proc[i].TpsFin, proc[i].TpsSej, proc[i].TpsAtt, proc[i].priorite);
+        printf("%c\t\t %d\t %d\t %d\t %d\t %d\t %d\n", proc[i].nom, proc[i].TpsExe, proc[i].TpsArr, proc[i].TpsFin, proc[i].TpsSej, proc[i].TpsAtt, proc[i].priorite);
     }
     printf("\n");
 
@@ -128,45 +158,23 @@ void affich_stat_ORDO(process *proc, int nbp)
     printf("le temps moyen d'attente est = %f\n", TpsAttMoy);
 }
 
-/**
- *  @fn void FIFO (process *proc, int nbp)
- *  @author Faucher Noé <fauchernoe@cy-tech.fr>
- *  @version 0.1
- *  @date Wed 05 Oct 2022 12:23
- *
- *  @brief Ordonne les proc en FIFO
- *
- *  @param[in]
- *
- */
-void affich_proc(process *proc,int nbp)
-{
-    for (int i = 0; i < nbp; i++)
-    {
-        for (int j = 0; j < proc[i].TpsExe; j++)
-        {
-            printf("%s ", proc[i].nom);
-        }
-    }
-    printf("\n\n");
-}
 
-/**
- *  @fn void prio (process *proc, int nbp)
- *  @author Noe Faucher<fauchernoe@cy-tech.fr>
- *  @version 0.1
- *  @date Wed 05 Oct 2022 12:06
- *
- *  @brief
- *
- *  @param[in]
- *
+
+/** @fn void PRIO(process *proc, int nbp, int preemptif)
+ * @author Faucher Noé (fauchernoe@cy-tech.fr)
+ * @version 0.1
+ * @date 26-10-2022
+ * @brief 
+ * 
+ * @param proc 
+ * @param nbp 
+ * @param preemptif 
  */
 void PRIO(process *proc, int nbp, int preemptif) {
     
-    // Utilise le FIFO pour ordonner les processus
-    FIFO(proc, nbp);
-    //affich_proc(proc,nbp);
+    // Tri les processus par temps arriver
+    tri_en_temps_arriver(proc, nbp);
+
     
     int nbp_end = 0;
     int curent_tps = 0;
@@ -250,7 +258,7 @@ void PRIO(process *proc, int nbp, int preemptif) {
         
         //affich_proc(proc,nbp);
 
-        printf("%s ",proc[index_curent_running].nom);
+        printf("%c ",proc[index_curent_running].nom);
         curent_tps++;
     }
 
@@ -261,30 +269,10 @@ void PRIO(process *proc, int nbp, int preemptif) {
 
 }
 
-/**
- * @author Quentin Ducoulombier (ducoulombi@cy-tech.fr)
- * @version 0.1
- * @date 2022-10-19
- * 
- * @brief Fonction qui permet de construire les "process"
- * 
- * @param fnom 
- * @param fTpsExe 
- * @param fTpsArr 
- * @param fpriorite 
- * @param proc 
- * @param i 
- */
-void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, process *proc, int i)
-{
-  strcpy(proc[i].nom, fnom);
-  proc[i].TpsExe = fTpsExe;
-  proc[i].TpsArr = fTpsArr;
-  proc[i].priorite = fpriorite;
-  proc[i].status = 0;
-}
 
-/**
+
+/** 
+ * @fn int alea(int lower, int upper)
  * @author FURGER Achille (furgerachi@cy-tech.fr)
  * @version 0.1
  * @date 25-10-2022
@@ -295,13 +283,13 @@ void process_construct(char* fnom, int fTpsExe, int fTpsArr, int fpriorite, proc
  * @param upper 
  * @return int 
  */
-
-int alea(int lower, int upper){
+int alea(int lower, int upper) {
     int num = (rand() % (upper - lower + 1)) + lower;
     return num;
 }
 
-/**
+/** 
+ * @fn process *exempleCours(int nbp) 
  * @author FURGER Achille (furgerachi@cy-tech.fr)
  * @version 0.1
  * @date 25-10-2022
@@ -311,23 +299,23 @@ int alea(int lower, int upper){
  * @param nbp 
  * @return process* 
  */
-
-process *exempleCours(int nbp){
+process *exempleCours(int nbp) 
+{
     // Creation de cinq processus
     process *proc;
     proc = (process *)malloc(sizeof(process) * nbp);
     
     // Initialisation des donn�es
-    process_construct("A",10,2,3,proc,0);
-    process_construct("B",6,0,5,proc,1);
-    process_construct("C",2,5,2,proc,2);
-    process_construct("D",4,5,1,proc,3);
-    process_construct("E",8,3,4,proc,4);
+    process_construct('A',10,2,3,proc,0);
+    process_construct('B',6,0,5,proc,1);
+    process_construct('C',2,5,2,proc,2);
+    process_construct('D',4,5,1,proc,3);
+    process_construct('E',8,3,4,proc,4);
 
     return proc;
 }
 
-/**
+/** @fn process *test1(int nbp) 
  * @author FURGER Achille (furgerachi@cy-tech.fr)
  * @version 0.1
  * @date 25-10-2022
@@ -337,114 +325,34 @@ process *exempleCours(int nbp){
  * @param nbp 
  * @return process* 
  */
-
-process *test1(int nbp) {
+process *test(int nbp) 
+{
     // Création des processus
     process *proc;
     proc = (process *)malloc(sizeof(process) * nbp);
 
-    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+    srand(time(NULL));
+    //char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     for (int i = 0; i < nbp; i++)
     {
-        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
+        process_construct(STR[i], alea(1,20), (i==0)? i:alea(0,40), alea(1,10), proc, i);
     }
     return proc;
 }
+
 
 /**
- * @author FURGER Achille (furgerachi@cy-tech.fr)
+ * @fn int main(int argc, char const *argv[]) 
+ * @author Faucher Noé (fauchernoe@cy-tech.fr)
  * @version 0.1
- * @date 25-10-2022
+ * @date 26-10-2022
+ * @brief 
  * 
- * @brief Fonction qui teste un cas plus ou moins extrèmes
- * 
- * @param nbp 
- * @return process* 
+ * @param argc 
+ * @param argv 
+ * @return int 
  */
-
-process *test2(int nbp) {
-    // Création des processus
-    process *proc;
-    proc = (process *)malloc(sizeof(process) * nbp);
-
-    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    for (int i = 0; i < nbp; i++)
-    {
-        process_construct(str[i], alea(0,20), alea(0,40), alea(0,10), proc, i);
-    }
-    return proc;
-}
-
-/**
- * @author FURGER Achille (furgerachi@cy-tech.fr)
- * @version 0.1
- * @date 25-10-2022
- * 
- * @brief Fonction qui teste un cas plus ou moins extrèmes
- * 
- * @param nbp 
- * @return process* 
- */
-
-process *test3(int nbp) {
-    // Création des processus
-    process *proc;
-    proc = (process *)malloc(sizeof(process) * nbp);
-
-    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    for (int i = 0; i < nbp; i++)
-    {
-        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
-    }
-    return proc;
-}
-
-/**
- * @author FURGER Achille (furgerachi@cy-tech.fr)
- * @version 0.1
- * @date 25-10-2022
- * 
- * @brief Fonction qui teste un cas plus ou moins extrèmes
- * 
- * @param nbp 
- * @return process* 
- */
-
-process *test4(int nbp) {
-    // Création des processus
-    process *proc;
-    proc = (process *)malloc(sizeof(process) * nbp);
-
-    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    for (int i = 0; i < nbp; i++)
-    {
-        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
-    }
-    return proc;
-}
-/**
- * @author FURGER Achille (furgerachi@cy-tech.fr)
- * @version 0.1
- * @date 25-10-2022
- * 
- * @brief Fonction qui teste un cas plus ou moins extrèmes
- * 
- * @param nbp 
- * @return process* 
- */
-process *test5(int nbp) {
-    // Création des processus
-    process *proc;
-    proc = (process *)malloc(sizeof(process) * nbp);
-
-    char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    for (int i = 0; i < nbp; i++)
-    {
-        process_construct("a", alea(0,20), alea(0,40), alea(0,10), proc, i);
-    }
-    return proc;
-}
-
 int main(int argc, char const *argv[]) {
 
     if (argc != 2 ) 
@@ -466,23 +374,12 @@ int main(int argc, char const *argv[]) {
     process_construct("E",8,3,4,proc,4);
 */
 
-    int nbp = 5;
-    process *proc = exempleCours(nbp);
+    // int nbp = 5;
+    // process *proc = exempleCours(nbp);
 
-    // int nbp = 10;
-    // process *proc = test1(nbp);
+    int nbp = 10;
+    process *proc = test(nbp);
 
-    // int nbp = 1;
-    // process *proc = test2(nbp);
-
-    // int nbp = 0;
-    // process *proc = test3(nbp);
-
-    // int nbp = 36;
-    // process *proc = test4(nbp);
-
-    // int nbp = 100;
-    // process *proc = etest5(nbp);
 
     // Afficher l'ordonnancement appilqu�
     int preemptif = atoi(argv[1]);
