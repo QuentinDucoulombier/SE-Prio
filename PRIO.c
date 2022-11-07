@@ -373,10 +373,11 @@ int main(int argc, char const *argv[]) {
     process_construct("D",4,5,1,proc,3);
     process_construct("E",8,3,4,proc,4);
 */
-
+    /*Ordonnement exemple cours*/
     // int nbp = 5;
     // process *proc = exempleCours(nbp);
 
+    /*Ordonnement test*/
     int nbp = 10;
     process *proc = test(nbp);
 
