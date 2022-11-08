@@ -374,12 +374,12 @@ int main(int argc, char const *argv[]) {
     process_construct("E",8,3,4,proc,4);
 */
     /*Ordonnement exemple cours*/
-    // int nbp = 5;
-    // process *proc = exempleCours(nbp);
+    int nbp = 5;
+    process *proc = exempleCours(nbp);
 
     /*Ordonnement test*/
-    int nbp = 10;
-    process *proc = test(nbp);
+    /*int nbp = 10;
+    process *proc = test(nbp);*/
 
 
     // Afficher l'ordonnancement appilqu�

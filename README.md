@@ -22,3 +22,8 @@ Pour le préemptif
 Il existe également la possibilité de tester le tri avec des processus au hasard.  
 Pour cela il faut modifier ligne 376
 <!--TODO modifier-->
+
+Exemple de tri:  
+<p align="center">
+    <img src="./dataForReadme/SE-Prio.png" width="450">
+</p>
